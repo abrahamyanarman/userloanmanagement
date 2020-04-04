@@ -9,12 +9,13 @@ class MyUserDetails extends GrailsUser {
     String lastName
     String userEmail
     String photoUri
+    String uuid
 
     MyUserDetails(String username, String password, boolean enabled,
                   boolean accountNonExpired, boolean credentialsNonExpired,
                   boolean accountNonLocked,
                   Collection<GrantedAuthority> authorities,
-                  long id, String fullName,String firstName,String lastName,String userEmail,String photoUri) {
+                  long id, String fullName,String firstName,String lastName,String userEmail,String photoUri,String uuid) {
         super(username, password, enabled, accountNonExpired,
                 credentialsNonExpired, accountNonLocked, authorities, id)
         this.firstName = firstName
@@ -22,5 +23,6 @@ class MyUserDetails extends GrailsUser {
         this.userEmail = userEmail
         this.photoUri = photoUri
         this.fullName = fullName
+        this.uuid = uuid
     }
 }

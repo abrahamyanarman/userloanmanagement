@@ -2,8 +2,12 @@ package userloanmanagement
 
 import am.neovision.UserService
 import am.neovision.dto.SignUpRequestCommand
+import am.neovision.dto.UserInfo
 import grails.plugin.springsecurity.annotation.Secured
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
+
+import javax.websocket.server.PathParam
 
 class UserController {
 
@@ -15,7 +19,11 @@ class UserController {
         this.userService = userService
     }
 
-    static allowedMethods = [register: "POST"]
+    static allowedMethods = [
+            register: "POST",
+            info: 'GET',
+            updateUser: 'POST'
+    ]
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def register(@RequestBody SignUpRequestCommand signUpRequestCommand) {
@@ -26,6 +34,14 @@ class UserController {
 
     def whoAmI(){
         respond userService.whoAmI(request)
+    }
+
+    def info(@PathVariable long id){
+        respond userService.userInfoById(id)
+    }
+
+    def updateUser(@RequestBody UserInfo userInfo){
+        respond userService.updateUser(userInfo)
     }
 
 }

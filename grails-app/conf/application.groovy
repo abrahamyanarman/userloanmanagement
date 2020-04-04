@@ -1,6 +1,7 @@
 
 
 // Added by the Spring Security Core plugin:
+//cors.headers = ['Access-Control-Allow-Headers': 'Content-Type, Authorization', 'Access-Control-Allow-Origin':'*']
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'am.neovision.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'am.neovision.UserAuthority'
 grails.plugin.springsecurity.authority.className = 'am.neovision.Authority'
@@ -36,6 +37,7 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 grails.plugin.springsecurity.rest.logout.endpointUrl = '/api/logout'
 /*grails.plugin.springsecurity.rest.token.validation.useBearerToken = false
 grails.plugin.springsecurity.rest.token.validation.headerName = 'X-Auth-Token'*/
+grails.plugin.springsecurity.rest.token.validation.headerName = "Authorization"
 grails.plugin.springsecurity.rest.token.storage.jwt.secret = 'secret01234567890ABCDEFGHIJKLMNO'
 grails.plugin.springsecurity.rest.token.storage.memcached.hosts = 'localhost:11211'
 grails.plugin.springsecurity.rest.token.storage.memcached.username = ''

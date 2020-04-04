@@ -2,7 +2,7 @@ package am.neovision
 
 import am.neovision.dto.ResponseDtoCommand
 import am.neovision.dto.SignUpRequestCommand
-import am.neovision.dto.UserInfoResponseCommand
+import am.neovision.dto.UserInfo
 import am.neovision.exception.CustomException
 import am.neovision.maper.UserMapper
 import grails.gorm.transactions.Transactional
@@ -28,7 +28,7 @@ class UserService {
     }
 
 
-    UserInfoResponseCommand whoAmI(HttpServletRequest httpServletRequest) {
+    UserInfo whoAmI(HttpServletRequest httpServletRequest) {
         def authHeader = null
         try {
             authHeader = httpServletRequest.getHeader("Authorization")
@@ -39,7 +39,7 @@ class UserService {
             def tokenPayload = new String(bytes, "UTF-8")
 
             String userName = new groovy.json.JsonSlurper().parseText(tokenPayload).sub
-            return new UserMapper().apply(User.findByUsername(userName))
+            return new UserMapper.FromUserToUserInfo().apply(User.findByUsername(userName))
 
         }else {
             throw new CustomException("Please signIn!", HttpStatus.UNPROCESSABLE_ENTITY)
@@ -99,5 +99,25 @@ class UserService {
                 return new ResponseDtoCommand( "Something went wrong, please try again.","errorCode:1003",HttpStatus.BAD_REQUEST)
             }
         }
+    }
+
+    UserInfo userInfoById(long id) {
+        return new UserMapper.FromUserToUserInfo().apply(User.findById(id))
+    }
+
+    @Transactional
+    UserInfo updateUser(UserInfo userInfo) {
+        User user = User.findById(userInfo.id)
+        user.setUserEmail(userInfo.email.toLowerCase(Locale.ENGLISH))
+        user.setUsername(userInfo.username.toLowerCase(Locale.ENGLISH))
+        user.setFirstName(userInfo.firstName)
+        user.setLastName(userInfo.lastName)
+        user.setPhotoUri(userInfo.photoUri)
+        user.setEnabled(userInfo.enabled)
+        user.setAccountExpired(userInfo.accountExpired)
+        user.setAccountLocked(userInfo.accountLocked)
+        user.setPasswordExpired(userInfo.passwordExpired)
+        user.save()
+        return new UserMapper.FromUserToUserInfo().apply(User.findById(userInfo.id))
     }
 }

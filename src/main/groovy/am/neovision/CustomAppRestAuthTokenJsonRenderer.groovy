@@ -10,7 +10,8 @@ class CustomAppRestAuthTokenJsonRenderer implements AccessTokenJsonRenderer {
     @Override
     String generateJson(AccessToken accessToken) {
         Map response = [
-                id           : accessToken.principal.id,
+                id           : (accessToken.principal as MyUserDetails).id,
+                uuid           : (accessToken.principal as MyUserDetails).uuid,
                 username     : accessToken.principal.username,
                 access_token : accessToken.accessToken,
                 token_type   : "Bearer",

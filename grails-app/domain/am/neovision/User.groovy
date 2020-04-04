@@ -1,5 +1,6 @@
 package am.neovision
 
+import grails.events.annotation.Subscriber
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import grails.compiler.GrailsCompileStatic
@@ -11,6 +12,7 @@ class User implements Serializable {
 
     private static final long serialVersionUID = 1
 
+    String uuid = UUID.randomUUID().toString()
     String firstName
     String lastName
     String userEmail
@@ -33,5 +35,10 @@ class User implements Serializable {
 
     static mapping = {
 	    password column: '`password`'
+        uuid index: '`uuid`'
+        photoUri sqlType: 'LONGTEXT'
     }
+
+
+
 }
