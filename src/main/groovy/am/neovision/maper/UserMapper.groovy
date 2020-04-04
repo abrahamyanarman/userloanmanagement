@@ -11,7 +11,7 @@ class UserMapper {
      class FromUserToUserInfo implements Function<User,UserInfo>{
         @Override
         UserInfo apply(User user) {
-            final UserInfo userInfo = new UserInfo()
+             UserInfo userInfo = new UserInfo()
             userInfo.setId(user.id)
             userInfo.setUuid(user.uuid)
             userInfo.setEmail(user.userEmail.toLowerCase(Locale.ENGLISH))
@@ -31,7 +31,7 @@ class UserMapper {
      class FromUserInfoToUser implements Function<UserInfo,User>{
         @Override
         User apply(UserInfo userInfo) {
-            final User user = new User()
+             User user = new User()
             user.setId(userInfo.id)
             user.setUuid(userInfo.uuid)
             user.setUserEmail(userInfo.email.toLowerCase(Locale.ENGLISH))

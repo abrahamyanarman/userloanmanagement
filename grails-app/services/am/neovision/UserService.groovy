@@ -7,6 +7,7 @@ import am.neovision.exception.CustomException
 import am.neovision.maper.UserMapper
 import grails.gorm.transactions.Transactional
 import org.springframework.http.HttpStatus
+import org.springframework.web.multipart.MultipartFile
 
 import javax.servlet.http.HttpServletRequest
 import javax.xml.bind.ValidationException
@@ -120,4 +121,15 @@ class UserService {
         user.save()
         return new UserMapper.FromUserToUserInfo().apply(User.findById(userInfo.id))
     }
+
+ /*   void updateUserPhoto(long id, MultipartFile picture){
+        User user = User.findById(id)
+        user.photoUri = picture
+        user.save()
+    }
+
+    byte[] getUserPhoto(long id) {
+       User user =  User.findById(id)
+        return user.photoUri
+    }*/
 }

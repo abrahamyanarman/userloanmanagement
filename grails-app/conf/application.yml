@@ -152,4 +152,5 @@ grails:
 grails:
     cors:
         enabled: true
-        allowedOrigins: http://localhost:4200
+        allowedOrigins:
+            - http://localhost:4200

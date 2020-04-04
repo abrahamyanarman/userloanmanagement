@@ -9,4 +9,5 @@ beans = {
     javaMailSender(JavaMailSenderImpl)
     accessTokenJsonRenderer(CustomAppRestAuthTokenJsonRenderer)
     userDetailsService(MyUserDetailsService)
+    //corsFilter(CorsFilter)
 }
