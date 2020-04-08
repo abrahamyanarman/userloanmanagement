@@ -154,3 +154,5 @@ grails:
         enabled: true
         allowedOrigins:
             - http://localhost:4200
+---
+resetPasswordUrl: "http://localhost:4200/resetPassword/"

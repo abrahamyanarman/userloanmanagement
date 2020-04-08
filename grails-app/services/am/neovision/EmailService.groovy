@@ -69,10 +69,11 @@ class EmailService {
 
         EmailTemplate emailTemplate = new EmailTemplate("resetPassword.html")
         String resetPasswordUrl = "$resetPasswordUrl${emailCodeService.generateCode(user.userEmail)}"
+        println(resetPasswordUrl)
         Map<String,String> replacements = new HashMap<String,String>()
-        replacements["fullName"] = "${user.firstName} ${user.lastName}"
-        replacements["contactUsUrl"] = contactUsUrl
-        replacements["resetPasswordUrl"] = resetPasswordUrl
+        replacements["{{fullName}}"] = "${user.firstName} ${user.lastName}"
+        replacements["{{contactUsUrl}}"] = contactUsUrl
+        replacements["{{resetPasswordUrl}}"] = resetPasswordUrl
         String messageText = emailTemplate.getTemplate(replacements)
 
         def mailMessage = javaMailSender.createMimeMessage()
@@ -125,4 +126,7 @@ class EmailService {
         return "Password successfully changed!"
     }
 
+    long generateCode(String email) {
+        return emailCodeService.generateCode(email)
+    }
 }

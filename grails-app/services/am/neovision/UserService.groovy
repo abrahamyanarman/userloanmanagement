@@ -7,6 +7,7 @@ import am.neovision.exception.CustomException
 import am.neovision.maper.UserMapper
 import grails.gorm.transactions.Transactional
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.web.multipart.MultipartFile
 
 import javax.servlet.http.HttpServletRequest
@@ -57,10 +58,26 @@ class UserService {
         user.save()
     }
 
-    void changePassword(String email, String password) {
-        User user = User.findByUserEmail(email)
-        user.password = password
-        user.save()
+    @Transactional
+    Map<String,String> changePassword(long emailCode, String password) {
+        Map<String,String> response = new HashMap<>()
+        if (EmailCodes.countByCode(emailCode)){
+            EmailCodes emailCodes = EmailCodes.findByCode(emailCode)
+            String email = emailCodes.email
+            User user = User.findByUserEmail(email)
+            emailCodes.delete()
+            user.setPassword(password)
+            user.save()
+            response.put("status",HttpStatus.OK)
+            response.put("message","Your password changed. Please try to login")
+            return response
+
+        }else {
+            response.put("status",HttpStatus.NOT_FOUND)
+            response.put("message","Email Code not found!")
+            return response
+        }
+
     }
 
     @Transactional
@@ -122,14 +139,10 @@ class UserService {
         return new UserMapper.FromUserToUserInfo().apply(User.findById(userInfo.id))
     }
 
- /*   void updateUserPhoto(long id, MultipartFile picture){
-        User user = User.findById(id)
-        user.photoUri = picture
-        user.save()
+    String resetPassword(String email) {
+        if (!User.countByUserEmail(email))
+            throw new UsernameNotFoundException("User with email $email doesn't exist!")
+        User user = User.findByUserEmail(email)
+        return emailService.sendResetPasswordMail(user)
     }
-
-    byte[] getUserPhoto(long id) {
-       User user =  User.findById(id)
-        return user.photoUri
-    }*/
 }

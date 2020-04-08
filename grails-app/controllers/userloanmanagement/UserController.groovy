@@ -3,15 +3,16 @@ package userloanmanagement
 import am.neovision.UserService
 import am.neovision.dto.SignUpRequestCommand
 import am.neovision.dto.UserInfo
+import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
+import groovy.json.JsonBuilder
+import org.grails.web.json.JSONObject
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.multipart.MultipartFile
 
-import javax.websocket.server.PathParam
 
-class UserController {
+class UserController{
 
     static responseFormats = ['json']
 
@@ -24,7 +25,9 @@ class UserController {
     static allowedMethods = [
             register: "POST",
             info: 'GET',
-            updateUser: 'POST'
+            updateUser: 'POST',
+            resetPassoword: 'POST',
+            changePasswordByEmailCode: 'POST'
     ]
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
@@ -45,12 +48,17 @@ class UserController {
     def updateUser(@RequestBody UserInfo userInfo){
         respond userService.updateUser(userInfo)
     }
-  /*  def getUserPhoto(@PathVariable long id){
-        respond userService.getUserPhoto(id)
+
+
+    @Secured(['permitAll'])
+    def resetPassoword(@RequestParam String userEmail){
+        respond new JSONObject("{responseMessage:"+userService.resetPassword(userEmail)+"}")
     }
 
-    def updateUserPhoto(@PathVariable long id,@RequestParam MultipartFile picture){
-        respond userService.updateUserPhoto(id,picture)
-    }*/
+    @Secured(['permitAll'])
+    def changePasswordByEmailCode(@PathVariable long emailCode,@RequestParam String password){
+        respond userService.changePassword(emailCode,password)
+    }
+
 
 }

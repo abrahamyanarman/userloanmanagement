@@ -11,6 +11,10 @@ class EmailCodes implements Serializable  {
 
     transient springSecurityService
 
+    EmailCodes(String email, Long code) {
+        this.email = email
+        this.code = code
+    }
     String email
     Long code
     static constraints = {
