@@ -60,5 +60,10 @@ class UserController{
         respond userService.changePassword(emailCode,password)
     }
 
+    @Secured('permitAll')
+    def activateProfile(@PathVariable String emailCode){
+        respond new JSONObject("{status:"+userService.activateProfile(emailCode)+"}")
+    }
+
 
 }

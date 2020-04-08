@@ -3,7 +3,7 @@ package userloanmanagement
 class UrlMappings {
 
     static mappings = {
-        "/$controller/$action?/$id?(.$format)?"{
+        "/api/$controller/$action?/$id?(.$format)?"{
             constraints {
                 // apply constraints here
             }
@@ -17,6 +17,7 @@ class UrlMappings {
         "/api/user/getUserPhoto/$id"(controller: "user",action: "getUserPhoto")
         "/api/user/resetPassword"(controller: "user",action: "resetPassoword")
         "/api/user/changePasswordByEmailCode/$emailCode"(controller: "user",action: "changePasswordByEmailCode")
+        "/api/user/activateProfile/$emailCode"(controller: "user",action: "changePasswordByEmailCode")
         "500"(view:'/error')
         "404"(view:'/notFound')
     }

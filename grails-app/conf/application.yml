@@ -156,3 +156,4 @@ grails:
             - http://localhost:4200
 ---
 resetPasswordUrl: "http://localhost:4200/resetPassword/"
+activateAccountUrl: "http://localhost:4200/activateProfile/"

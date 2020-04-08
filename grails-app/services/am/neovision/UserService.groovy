@@ -8,7 +8,6 @@ import am.neovision.maper.UserMapper
 import grails.gorm.transactions.Transactional
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.userdetails.UsernameNotFoundException
-import org.springframework.web.multipart.MultipartFile
 
 import javax.servlet.http.HttpServletRequest
 import javax.xml.bind.ValidationException
@@ -83,7 +82,7 @@ class UserService {
     @Transactional
     ResponseDtoCommand createNewUser(SignUpRequestCommand signUpRequestCommand) {
 
-        if(signUpRequestCommand.password != signUpRequestCommand.repassword) {
+        if(signUpRequestCommand.password != signUpRequestCommand.repasword) {
             return new ResponseDtoCommand( "Password and Re-Password not match.","errorCode:1004",HttpStatus.BAD_REQUEST)
 
         } else {
@@ -144,5 +143,23 @@ class UserService {
             throw new UsernameNotFoundException("User with email $email doesn't exist!")
         User user = User.findByUserEmail(email)
         return emailService.sendResetPasswordMail(user)
+    }
+
+    boolean activateProfile(String emailCode) {
+
+        if (EmailCodes.countByCode(emailCode)){
+            EmailCodes emailCodes = EmailCodes.findByCode(emailCode)
+            String email = emailCodes.email
+            User user = User.findByUserEmail(email)
+            emailCodes.delete()
+            user.setEnabled(true)
+            user.save()
+
+            return true
+
+        }else {
+
+            return false
+        }
     }
 }

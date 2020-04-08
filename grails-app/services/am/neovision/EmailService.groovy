@@ -69,7 +69,6 @@ class EmailService {
 
         EmailTemplate emailTemplate = new EmailTemplate("resetPassword.html")
         String resetPasswordUrl = "$resetPasswordUrl${emailCodeService.generateCode(user.userEmail)}"
-        println(resetPasswordUrl)
         Map<String,String> replacements = new HashMap<String,String>()
         replacements["{{fullName}}"] = "${user.firstName} ${user.lastName}"
         replacements["{{contactUsUrl}}"] = contactUsUrl
@@ -87,18 +86,19 @@ class EmailService {
     }
 
     String changePasswordForFirstLogin(User user){
-        EmailTemplate emailTemplate = new EmailTemplate("activateAccount.html")//TODO set activateAccountURL
+        EmailTemplate emailTemplate = new EmailTemplate("activateAccount.html")
+        String activateUrl = "$activateAccountUrl${emailCodeService.generateCode(user.userEmail)}"
         Map<String,String> replacements = new HashMap<String,String>()
         replacements["{{fullName}}"] = "${user.firstName} ${user.lastName}"
         replacements["{{contactUsUrl}}"] = contactUsUrl
-        replacements["{{activateAccountUrl}}"] = activateAccountUrl
+        replacements["{{activateAccountUrl}}"] = activateUrl
         String messageText = emailTemplate.getTemplate(replacements)
         def mailMessage =javaMailSender.createMimeMessage()
         def mimeMessageHelper = new MimeMessageHelper(mailMessage, true)
 
         mimeMessageHelper.setTo(user.userEmail)
         mimeMessageHelper
-        mimeMessageHelper.setSubject("Change Password")
+        mimeMessageHelper.setSubject("Activate Account")
         mimeMessageHelper.setText(messageText,true)
         sendEmail(mailMessage)
 

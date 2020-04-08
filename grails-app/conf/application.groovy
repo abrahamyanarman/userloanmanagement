@@ -16,9 +16,10 @@ grails.plugin.springsecurity.interceptUrlMap = [
 		[pattern: '/**/images/**',   access: ['permitAll']],
 		[pattern: '/**/favicon.ico', access: ['permitAll']],
 		[pattern: '/api/login',          access: ['permitAll']],
-		[pattern: '/api/register',          access: ['permitAll']],
+		[pattern: '/api/user/register',          access: ['permitAll']],
 		[pattern: '/api/user/resetPassword',  access:['permitAll']],
 		[pattern: '/api/user/changePasswordByEmailCode/**',  access:['permitAll']],
+		[pattern: '/api/user/activateProfile/**',  access:['permitAll']],
 		[pattern: '/api/logout',        access: ['isFullyAuthenticated()']],
 		[pattern: '/api/product',    access: ['isFullyAuthenticated()']],
 		[pattern: '/**',             access: ['isFullyAuthenticated()']]
@@ -32,6 +33,8 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**/favicon.ico', filters: 'none'],
 	[pattern: '/api/user/resetPassword', filters: 'none'],
 	[pattern: '/api/user/changePasswordByEmailCode/**', filters: 'none'],
+	[pattern: '/api/user/register', filters: 'none'],
+	[pattern: '/api/user/activateProfile/**', filters: 'none'],
 	[pattern: '/api/**', filters:'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'],
 	[pattern: '/**', filters:'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter']
 ]

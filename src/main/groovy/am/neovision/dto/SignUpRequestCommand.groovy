@@ -21,13 +21,14 @@ class SignUpRequestCommand implements Validateable{
     @Size(min = 8, max = 16, message = "Password should be 8 - 16 characters long.")
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%^&+=])(?=\\S+\$).{8,}\$")
     String password
-    String repassword
+    String repasword
     String photoUri
     List<Long> roles
 
     static constraints = {
         username nullable: false, blank: false, unique: true
         password nullable: false,blank: false, password:true
+        email nullable: false,blank: false, email: true
 
     }
 }
