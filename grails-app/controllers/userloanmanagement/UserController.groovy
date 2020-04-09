@@ -1,5 +1,6 @@
 package userloanmanagement
 
+import am.neovision.User
 import am.neovision.UserService
 import am.neovision.dto.SignUpRequestCommand
 import am.neovision.dto.UserInfo
@@ -65,5 +66,19 @@ class UserController{
         respond new JSONObject("{status:"+userService.activateProfile(emailCode)+"}")
     }
 
+    @Secured('ROLE_ADMIN')
+    def getAllUsers(){
+        respond userService.getAllUsers()
+    }
+
+    @Secured('ROLE_ADMIN')
+    def activateUserById(@PathVariable long id){
+        respond userService.activateUserById(id)
+    }
+
+    @Secured('ROLE_ADMIN')
+    def deactivateUserById(@PathVariable long id){
+       respond userService.deactivateUserById(id)
+    }
 
 }

@@ -98,20 +98,12 @@ class UserService {
                     def userRole = Authority.get(role)
                     if(user && userRole) {
                         UserAuthority.create user, userRole
-
-
                     } else {
                         return new ResponseDtoCommand( "Something went wrong, please try again.","errorCode:1002",HttpStatus.BAD_REQUEST)
-
                     }
                 }
-
-
                 emailService.changePasswordForFirstLogin(User.findByUserEmail(signUpRequestCommand.email))
-
                 return new ResponseDtoCommand( "You have registered successfully. Please Check your email to activate your account.",HttpStatus.OK)
-
-
             } catch (ValidationException e) {
                 return new ResponseDtoCommand( "Something went wrong, please try again.","errorCode:1003",HttpStatus.BAD_REQUEST)
             }
@@ -161,5 +153,25 @@ class UserService {
 
             return false
         }
+    }
+
+    List<UserInfo> getAllUsers() {
+        List<UserInfo> users = new ArrayList<>();
+        User.getAll().each {user -> users.add( new UserMapper.FromUserToUserInfo().apply(user))}
+        return users
+    }
+
+    UserInfo activateUserById(long id){
+        User user = User.findById(id)
+        user.setEnabled(true)
+        user.save()
+        return new UserMapper.FromUserToUserInfo().apply(user)
+    }
+    UserInfo deactivateUserById(long id){
+        User user = User.findById(id)
+        user.setEnabled(false)
+        user.save()
+        return new UserMapper.FromUserToUserInfo().apply(user)
+
     }
 }
