@@ -24,6 +24,8 @@ class User implements Serializable {
     boolean accountLocked
     boolean passwordExpired
 
+    static hasMany = [loans: Loan, loanRequests:LoanRequest]
+
     Set<Authority> getAuthorities() {
         (UserAuthority.findAllByUser(this) as List<UserAuthority>)*.authority as Set<Authority>
     }

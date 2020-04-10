@@ -21,6 +21,7 @@ class UrlMappings {
         "/api/user/activateProfile/$emailCode"(controller: "user",action: "changePasswordByEmailCode")
         "/api/user/activateProfileById/$id"(controller: "user",action: "activateUserById")
         "/api/user/deactivateProfileById/$id"(controller: "user",action: "deactivateUserById")
+        "/api/loan/monthlyPaymentWithUniForm"(controller: "loan",action: "getLoanMonthlyPaymentWithUniformPayments")
         "500"(view:'/error')
         "404"(view:'/notFound')
     }

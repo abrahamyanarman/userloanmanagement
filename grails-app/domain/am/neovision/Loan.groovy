@@ -1,21 +1,38 @@
 package am.neovision
 
-import grails.rest.Resource
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
 
-@Resource(uri='/api/loan')
+
+@EqualsAndHashCode
+@ToString(includeNames=true, includePackage=false)
 class Loan implements Serializable{
 
     private static final long serialVersionUID = 1
 
     transient springSecurityService
 
-    String loanUUID
-    BigDecimal amount
-    Integer term
+    String loanUUID = UUID.randomUUID().toString()
+    BigDecimal loanAmount
+    int loanTerm
+    float loanInterestRate
     Date createDate = new Date()
+    LoanType loanType
+    static belongsTo = [amortiazation: AmortizationShedule]
+    static hasOne = [user:User]
 
 
 
     static constraints = {
+       loanAmount nullable: false
+       loanType nullable: false
+       createDate nullable: false
+
     }
+    static mapping = {
+        amortiazation lazy: true
+        loanType sqlType: 'TEXT'
+    }
+
 }
+
