@@ -11,7 +11,13 @@ import java.time.format.DateTimeFormatter
 @Transactional
 class LoanService {
 
-    double calculateLoanMonthlyPaymentWithUniformPayments(int amount,double rate, int term){
+    private EmailService emailService
+
+    LoanService(EmailService emailService) {
+        this.emailService = emailService
+    }
+
+    double calculateLoanMonthlyPaymentWithUniformPayments(int amount, double rate, int term){
         BigDecimal r = rate/(100*12)
         BigDecimal R=new BigDecimal(amount*r/(1-(1/Math.pow((1+r),term)))).setScale(2,RoundingMode.HALF_UP)
         return R.doubleValue()
@@ -56,7 +62,26 @@ class LoanService {
         return loanRequest
     }
 
+    LoanRequest updateLoanRequest(LoanRequest loanRequestTmp,String created, String preferredPaymentDate) {
+        LoanRequest loanRequest = LoanRequest.findById(loanRequestTmp.id)
+        loanRequest.status = LoanRequestStatus.APPROVED
+        loanRequest.user = User.findByUsername(loanRequestTmp.user.username)
+        loanRequest.crated = new Date(created)
+        loanRequest.loanType = loanRequestTmp.loanType
+        loanRequest.preferredLoanAmount = loanRequestTmp.preferredLoanAmount
+        loanRequest.preferredLoanInterestRate = loanRequestTmp.preferredLoanInterestRate
+        loanRequest.preferredLoanTerm = loanRequestTmp.preferredLoanTerm
+        loanRequest.preferredPaymentDate = new Date(preferredPaymentDate)
+        loanRequest.save(false)
+        emailService.sendNotificationAboutApprovingLoan(loanRequest)
+        return loanRequest
+    }
+
     Set<LoanRequest> getLoanrequests(String username) {
         return User.findByUsername(username).loanRequests
+    }
+
+    Set<LoanRequest> getLoanRequestsWithStatusRequested() {
+        LoanRequest.findAllByStatus(LoanRequestStatus.REQUESTED)
     }
 }

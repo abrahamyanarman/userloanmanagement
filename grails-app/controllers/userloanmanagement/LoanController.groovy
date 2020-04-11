@@ -36,5 +36,14 @@ class LoanController {
         respond loanService.getLoanrequests(username)
     }
 
+    @Secured(['ROLE_ADMIN'])
+    def getLoanRequestsWithStatusRequested(){
+        respond loanService.getLoanRequestsWithStatusRequested()
+    }
+
+    @Secured(['ROLE_ADMIN'])
+    def updateLoanRequest(@RequestBody LoanRequest loanRequest,@RequestParam String created,@RequestParam String preferredPaymentDate){
+        respond loanService.updateLoanRequest(loanRequest,created,preferredPaymentDate)
+    }
 
 }

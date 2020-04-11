@@ -129,4 +129,20 @@ class EmailService {
     long generateCode(String email) {
         return emailCodeService.generateCode(email)
     }
+
+    void sendNotificationAboutApprovingLoan(LoanRequest loanRequest) {
+        EmailTemplate emailTemplate = new EmailTemplate("emailNotificationAboutAprrovingLoan.html")
+        Map<String,String> replacements = new HashMap<String,String>()
+        replacements["{{contactUsUrl}}"] = contactUsUrl
+        replacements["{{loanId}}"] = loanRequest.id.toString()
+        String messageText = emailTemplate.getTemplate(replacements)
+        def mailMessage =javaMailSender.createMimeMessage()
+        def mimeMessageHelper = new MimeMessageHelper(mailMessage, true)
+
+        mimeMessageHelper.setTo(loanRequest.user.userEmail)
+        mimeMessageHelper
+        mimeMessageHelper.setSubject("Info About Loan")
+        mimeMessageHelper.setText(messageText,true)
+        sendEmail(mailMessage)
+    }
 }
