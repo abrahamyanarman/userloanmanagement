@@ -23,6 +23,7 @@ class UrlMappings {
         "/api/user/deactivateProfileById/$id"(controller: "user",action: "deactivateUserById")
         "/api/loan/monthlyPaymentWithUniForm"(controller: "loan",action: "getLoanMonthlyPaymentWithUniformPayments")
         "/api/loan/loanPaymentSchedule"(controller: "loan",action: "getLoanPaymentSchedule")
+        "/api/loan/createLoanRequest"(controller: "loan",action: "createLoanRequest")
         "500"(view:'/error')
         "404"(view:'/notFound')
     }

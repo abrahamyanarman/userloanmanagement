@@ -41,4 +41,18 @@ class LoanService {
         }
         return amortizationSchedules
     }
+
+    LoanRequest createLoanRequest(LoanRequest loanRequestTmp,String created, String preferredPaymentDate) {
+        LoanRequest loanRequest = new LoanRequest()
+        loanRequest.status = LoanRequestStatus.REQUESTED
+        loanRequest.user = User.findByUsername(loanRequestTmp.user.username)
+        loanRequest.crated = new Date(created)
+        loanRequest.loanType = loanRequestTmp.loanType
+        loanRequest.preferredLoanAmount = loanRequestTmp.preferredLoanAmount
+        loanRequest.preferredLoanInterestRate = loanRequestTmp.preferredLoanInterestRate
+        loanRequest.preferredLoanTerm = loanRequestTmp.preferredLoanTerm
+        loanRequest.preferredPaymentDate = new Date(preferredPaymentDate)
+         loanRequest.save()
+        return loanRequest
+    }
 }
