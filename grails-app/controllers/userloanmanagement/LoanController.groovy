@@ -30,4 +30,11 @@ class LoanController {
     def createLoanRequest(@RequestBody LoanRequest loanRequest,@RequestParam String created,@RequestParam String preferredPaymentDate){
         respond loanService.createLoanRequest(loanRequest,created,preferredPaymentDate)
     }
+
+    @Secured(['ROLE_ADMIN','ROLE_USER'])
+    def getLoanrequests(@RequestParam String username){
+        respond loanService.getLoanrequests(username)
+    }
+
+
 }

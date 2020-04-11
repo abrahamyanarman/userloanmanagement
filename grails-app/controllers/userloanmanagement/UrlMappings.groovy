@@ -24,6 +24,7 @@ class UrlMappings {
         "/api/loan/monthlyPaymentWithUniForm"(controller: "loan",action: "getLoanMonthlyPaymentWithUniformPayments")
         "/api/loan/loanPaymentSchedule"(controller: "loan",action: "getLoanPaymentSchedule")
         "/api/loan/createLoanRequest"(controller: "loan",action: "createLoanRequest")
+        "/api/loan/getLoanrequests"(controller: "loan",action: "getLoanrequests")
         "500"(view:'/error')
         "404"(view:'/notFound')
     }

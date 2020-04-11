@@ -52,7 +52,11 @@ class LoanService {
         loanRequest.preferredLoanInterestRate = loanRequestTmp.preferredLoanInterestRate
         loanRequest.preferredLoanTerm = loanRequestTmp.preferredLoanTerm
         loanRequest.preferredPaymentDate = new Date(preferredPaymentDate)
-         loanRequest.save()
+        loanRequest.save()
         return loanRequest
+    }
+
+    Set<LoanRequest> getLoanrequests(String username) {
+        return User.findByUsername(username).loanRequests
     }
 }
