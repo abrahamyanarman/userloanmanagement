@@ -3,7 +3,7 @@ package am.neovision
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class AmortizationSheduleSpec extends Specification implements DomainUnitTest<AmortizationShedule> {
+class AmortizationScheduleSpec extends Specification implements DomainUnitTest<AmortizationSchedule> {
 
     def setup() {
     }

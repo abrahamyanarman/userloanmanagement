@@ -18,7 +18,7 @@ class Loan implements Serializable{
     float loanInterestRate
     Date createDate = new Date()
     LoanType loanType
-    static belongsTo = [amortiazation: AmortizationShedule]
+    static belongsTo = [amortiazation: AmortizationSchedule]
     static hasOne = [user:User]
 
 
