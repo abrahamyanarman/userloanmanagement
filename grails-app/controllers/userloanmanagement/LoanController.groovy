@@ -1,6 +1,7 @@
 package userloanmanagement
 
 import am.neovision.LoanRequest
+import am.neovision.LoanRequestStatus
 import am.neovision.LoanService
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
@@ -44,6 +45,16 @@ class LoanController {
     @Secured(['ROLE_ADMIN'])
     def updateLoanRequest(@RequestBody LoanRequest loanRequest,@RequestParam String created,@RequestParam String preferredPaymentDate){
         respond loanService.updateLoanRequest(loanRequest,created,preferredPaymentDate)
+    }
+
+    @Secured(['ROLE_USER'])
+    def updateLoanRequestStatusByUser(@RequestBody LoanRequest loanRequest){
+        respond loanService.updateLoanRequestStatusByUser(loanRequest)
+    }
+
+    @Secured(['ROLE_ADMIN'])
+    def getLoanRequestsWithStatus(@RequestParam String status){
+        respond loanService.getLoanRequestsWithStatus(LoanRequestStatus.valueOf(status))
     }
 
 }

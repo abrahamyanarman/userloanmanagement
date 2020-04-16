@@ -145,4 +145,8 @@ class EmailService {
         mimeMessageHelper.setText(messageText,true)
         sendEmail(mailMessage)
     }
+
+    void sendNotificationAboutCancelingLoan(LoanRequest loanRequest) {
+
+    }
 }

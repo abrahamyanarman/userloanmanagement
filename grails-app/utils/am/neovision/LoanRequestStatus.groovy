@@ -1,8 +1,12 @@
 package am.neovision
 
-enum LoanRequestStatus {
+import grails.validation.Validateable
+
+enum LoanRequestStatus{
     REQUESTED,
     WAITING,
     APPROVED,
-    CANCELED
+    CANCELED,
+    APPROVEDBYUSER,
+    CANCELEDBYUSER
 }

@@ -64,16 +64,25 @@ class LoanService {
 
     LoanRequest updateLoanRequest(LoanRequest loanRequestTmp,String created, String preferredPaymentDate) {
         LoanRequest loanRequest = LoanRequest.findById(loanRequestTmp.id)
-        loanRequest.status = LoanRequestStatus.APPROVED
+        if (loanRequest.status == LoanRequestStatus.REQUESTED){
+            loanRequest.status = LoanRequestStatus.APPROVED
+        }
         loanRequest.user = User.findByUsername(loanRequestTmp.user.username)
-        loanRequest.crated = new Date(created)
+        loanRequest.crated = new Date(created.replace('-','/'))
         loanRequest.loanType = loanRequestTmp.loanType
         loanRequest.preferredLoanAmount = loanRequestTmp.preferredLoanAmount
         loanRequest.preferredLoanInterestRate = loanRequestTmp.preferredLoanInterestRate
         loanRequest.preferredLoanTerm = loanRequestTmp.preferredLoanTerm
-        loanRequest.preferredPaymentDate = new Date(preferredPaymentDate)
+        loanRequest.preferredPaymentDate = new Date(preferredPaymentDate.replace('-','/'))
         loanRequest.save(false)
-        emailService.sendNotificationAboutApprovingLoan(loanRequest)
+        switch (loanRequest.status){
+            case LoanRequestStatus.APPROVED:
+                emailService.sendNotificationAboutApprovingLoan(loanRequest)
+                break
+            case LoanRequestStatus.CANCELED:
+                emailService.sendNotificationAboutCancelingLoan(loanRequest)
+                break
+        }
         return loanRequest
     }
 
@@ -82,6 +91,38 @@ class LoanService {
     }
 
     Set<LoanRequest> getLoanRequestsWithStatusRequested() {
-        LoanRequest.findAllByStatus(LoanRequestStatus.REQUESTED)
+        Set<LoanRequest> loanRequests = LoanRequest.findAllByStatus(LoanRequestStatus.REQUESTED)
+
+    }
+
+    LoanRequest updateLoanRequestStatusByUser(LoanRequest loanRequestTmp) {
+        LoanRequest loanRequest = LoanRequest.findById(loanRequestTmp.id)
+        loanRequest.status = LoanRequestStatus.APPROYUSER
+        loanRequest.save()
+        return loanRequest
+    }
+
+    Set<LoanRequest> getLoanRequestsWithStatus(LoanRequestStatus loanRequestStatus) {
+        Set<LoanRequest> loanRequests
+        if (loanRequestStatus.equals(LoanRequestStatus.APPROVED)||loanRequestStatus.equals(LoanRequestStatus.APPROVEDBYUSER)){
+            def criteria = LoanRequest.createCriteria()
+            loanRequests = criteria.list {
+               or {
+                   eq("status",LoanRequestStatus.APPROVED)
+                   eq("status",LoanRequestStatus.APPROVEDBYUSER)
+               }
+            }
+        }else if (loanRequestStatus.equals(LoanRequestStatus.CANCELED)||loanRequestStatus.equals(LoanRequestStatus.CANCELEDBYUSER)){
+            def criteria = LoanRequest.createCriteria()
+            loanRequests = criteria.list {
+                or {
+                    eq("status",LoanRequestStatus.CANCELED)
+                    eq("status",LoanRequestStatus.CANCELEDBYUSER)
+                }
+            }
+        }else {
+            loanRequests = LoanRequest.findAllByStatus(loanRequestStatus)
+        }
+        return loanRequests
     }
 }
