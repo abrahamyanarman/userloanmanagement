@@ -1,10 +1,8 @@
 package am.neovision
 
-import groovy.transform.EqualsAndHashCode
-import groovy.transform.ToString
 
-@EqualsAndHashCode
-@ToString(includeNames=true, includePackage=false)
+
+
 class AmortizationSchedule implements Serializable,Comparable<AmortizationSchedule>{
     private static final long serialVersionUID = 145465465446
 
@@ -48,5 +46,22 @@ class AmortizationSchedule implements Serializable,Comparable<AmortizationSchedu
     @Override
     int compareTo(AmortizationSchedule o) {
         return paymentDate <=> o.paymentDate
+    }
+
+    @Override
+     String toString() {
+        return "AmortizationSchedule{" +
+                "id=" + id +
+                ", version=" + version +
+                ", loan=" + loan +
+                ", paymentDate='" + paymentDate + '\'' +
+                ", payment=" + payment +
+                ", principal=" + principal +
+                ", interest=" + interest +
+                ", totalInterest=" + totalInterest +
+                ", balance=" + balance +
+                ", payedDate='" + payedDate + '\'' +
+                ", status=" + status +
+                '}';
     }
 }

@@ -1,11 +1,9 @@
 package am.neovision
 
-import groovy.transform.EqualsAndHashCode
-import groovy.transform.ToString
 
 
-@EqualsAndHashCode
-@ToString(includeNames=true, includePackage=false)
+
+
 class Loan implements Serializable{
 
     private static final long serialVersionUID = 1
@@ -18,7 +16,7 @@ class Loan implements Serializable{
     float loanInterestRate
     Date createDate = new Date()
     LoanType loanType
-    static belongsTo = [amortiazation: AmortizationSchedule]
+    static hasMany = [amortiazation: AmortizationSchedule]
     static hasOne = [user:User]
 
 
@@ -34,5 +32,21 @@ class Loan implements Serializable{
         loanType sqlType: 'TEXT'
     }
 
+
+    @Override
+     String toString() {
+        return "Loan{" +
+                "id=" + id +
+                ", version=" + version +
+                ", user=" + user +
+                ", springSecurityService=" + springSecurityService +
+                ", loanUUID='" + loanUUID + '\'' +
+                ", loanAmount=" + loanAmount +
+                ", loanTerm=" + loanTerm +
+                ", loanInterestRate=" + loanInterestRate +
+                ", createDate=" + createDate +
+                ", loanType=" + loanType +
+                '}';
+    }
 }
 

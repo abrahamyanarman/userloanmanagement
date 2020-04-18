@@ -1,6 +1,7 @@
 package am.neovision
 
 import grails.gorm.transactions.Transactional
+import org.springframework.web.bind.annotation.RequestParam
 
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
@@ -48,7 +49,7 @@ class LoanService {
         return amortizationSchedules
     }
 
-    LoanRequest createLoanRequest(LoanRequest loanRequestTmp,String created, String preferredPaymentDate) {
+    LoanRequest createLoanRequest(LoanRequest loanRequestTmp,String created, String preferredPaymentDate, String preferredStartDate) {
         LoanRequest loanRequest = new LoanRequest()
         loanRequest.status = LoanRequestStatus.REQUESTED
         loanRequest.user = User.findByUsername(loanRequestTmp.user.username)
@@ -58,6 +59,7 @@ class LoanService {
         loanRequest.preferredLoanInterestRate = loanRequestTmp.preferredLoanInterestRate
         loanRequest.preferredLoanTerm = loanRequestTmp.preferredLoanTerm
         loanRequest.preferredPaymentDate = new Date(preferredPaymentDate)
+        loanRequest.preferredStartDate = new Date(preferredStartDate)
         loanRequest.save()
         return loanRequest
     }
@@ -97,7 +99,7 @@ class LoanService {
 
     LoanRequest updateLoanRequestStatusByUser(LoanRequest loanRequestTmp) {
         LoanRequest loanRequest = LoanRequest.findById(loanRequestTmp.id)
-        loanRequest.status = LoanRequestStatus.APPROYUSER
+        loanRequest.status = LoanRequestStatus.APPROVEDBYUSER
         loanRequest.save()
         return loanRequest
     }
@@ -124,5 +126,36 @@ class LoanService {
             loanRequests = LoanRequest.findAllByStatus(loanRequestStatus)
         }
         return loanRequests
+    }
+
+    Loan createLoan(LoanRequest loanRequest,String preferredStartDate,String preferredPaymentDate) {
+        Loan loan = new Loan()
+        loan.user = loanRequest.user
+        loan.loanType = loanRequest.loanType
+        loan.createDate = new Date()
+        loan.loanAmount = loanRequest.preferredLoanAmount
+        loan.loanInterestRate = loanRequest.preferredLoanInterestRate
+        loan.loanTerm = loanRequest.preferredLoanTerm
+        loan.save()
+        loan = Loan.findByLoanUUID(loan.loanUUID)
+        Set<AmortizationSchedule> amortizationSchedules = this.getLoanPaymentSchedule(loanRequest.preferredLoanAmount.intValue(),loanRequest.preferredLoanInterestRate.toDouble(),loanRequest.preferredLoanTerm.intValue(),preferredStartDate)
+        amortizationSchedules.each {amortizationSchedule ->
+            amortizationSchedule.loan = loan
+            amortizationSchedule.save()}
+        LoanRequest loanreq = LoanRequest.findById(loanRequest.id)
+        loanreq.status = LoanRequestStatus.FINISHED
+        loanreq.save(false)
+        loan.amortiazation = AmortizationSchedule.findAllByLoan(loan)
+        loan.save()
+        return loan
+    }
+
+    Set<Loan> getLoans(String username) {
+        Set<Loan> loans = Loan.findAllByUser(User.findByUsername(username))
+        return loans
+    }
+
+    Set<AmortizationSchedule> getLoanSchedule(long id) {
+        return Loan.findById(id).amortiazation
     }
 }

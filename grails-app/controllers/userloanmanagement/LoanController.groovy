@@ -6,6 +6,7 @@ import am.neovision.LoanService
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 import org.grails.web.json.JSONObject
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 
@@ -28,8 +29,8 @@ class LoanController {
     }
 
     @Secured(['ROLE_ADMIN','ROLE_USER'])
-    def createLoanRequest(@RequestBody LoanRequest loanRequest,@RequestParam String created,@RequestParam String preferredPaymentDate){
-        respond loanService.createLoanRequest(loanRequest,created,preferredPaymentDate)
+    def createLoanRequest(@RequestBody LoanRequest loanRequest,@RequestParam String created,@RequestParam String preferredPaymentDate,@RequestParam String preferredStartDate){
+        respond loanService.createLoanRequest(loanRequest,created,preferredPaymentDate,preferredStartDate)
     }
 
     @Secured(['ROLE_ADMIN','ROLE_USER'])
@@ -57,4 +58,17 @@ class LoanController {
         respond loanService.getLoanRequestsWithStatus(LoanRequestStatus.valueOf(status))
     }
 
+    def createLoan(@RequestBody LoanRequest loanRequest,@RequestParam String preferredStartDate,@RequestParam String preferredPaymentDate){
+        respond loanService.createLoan(loanRequest,preferredStartDate,preferredPaymentDate)
+    }
+
+    @Secured(['ROLE_ADMIN','ROLE_USER'])
+    def getLoans(@RequestParam String username){
+        respond loanService.getLoans(username)
+    }
+
+    @Secured(['ROLE_ADMIN','ROLE_USER'])
+    def getLoanSchedule(@PathVariable long id){
+        respond loanService.getLoanSchedule(id)
+    }
 }

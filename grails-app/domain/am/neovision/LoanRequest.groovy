@@ -13,6 +13,7 @@ class LoanRequest  implements Serializable{
     int preferredLoanTerm
     float preferredLoanInterestRate
     Date preferredPaymentDate
+    Date preferredStartDate
     LoanType loanType
     Date crated
     LoanRequestStatus status = LoanRequestStatus.REQUESTED

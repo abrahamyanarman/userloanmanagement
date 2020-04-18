@@ -8,5 +8,6 @@ enum LoanRequestStatus{
     APPROVED,
     CANCELED,
     APPROVEDBYUSER,
-    CANCELEDBYUSER
+    CANCELEDBYUSER,
+    FINISHED
 }
